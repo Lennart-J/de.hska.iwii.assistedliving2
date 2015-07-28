@@ -69,7 +69,9 @@ public class ImageProvider {
 		try {
 			url = new URL("http://kachelmannwetter.com/images/data/cache/px250/px250_"+ year +"_"+ month +"_" + day + "_" + part.id + "_" + hour + minute +".png"); // 
 			image = ImageIO.read(url);
-			return image;
+			BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+		    convertedImg.getGraphics().drawImage(image, 0, 0, null);
+			return convertedImg;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

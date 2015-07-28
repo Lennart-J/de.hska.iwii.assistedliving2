@@ -82,7 +82,7 @@ public class ImageConversionUtil {
 	public static BufferedImage mat2Img(Mat in)
     {
         BufferedImage out;
-        byte[] data = new byte[760 * 616 * (int)in.elemSize()];
+        byte[] data = new byte[in.width() * in.height() * (int)in.elemSize() ];
         int type;
         in.get(0, 0, data);
 
@@ -91,9 +91,9 @@ public class ImageConversionUtil {
         else
             type = BufferedImage.TYPE_3BYTE_BGR;
 
-        out = new BufferedImage(760, 616, type);
+        out = new BufferedImage(in.width(), in.height(), type);
 
-        out.getRaster().setDataElements(0, 0, 760, 616, data);
+        out.getRaster().setDataElements(0, 0, in.width(), in.height(), data);
         return out;
     } 
 
