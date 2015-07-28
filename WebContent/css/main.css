@@ -1,0 +1,36 @@
+#footer {
+    position: relative;
+    width: 700px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.main-wrapper {
+	margin: 10px;
+	position: relative;
+    width: 1200px;
+}
+
+#img-wrapper {
+	display: inline-block;
+}
+
+#form-wrapper {
+	display: inline-block;
+    vertical-align: top;
+    margin-left: 10px;
+    padding: 5px;
+	
+}
+
+#img-canvas {
+	position:absolute;
+}
+
+#config-form {
+	padding: 5px;
+    border: 2px groove threedface;
+    -webkit-box-shadow: 4px 7px 13px -5px rgba(0,0,0,0.2);
+	-moz-box-shadow: 4px 7px 13px -5px rgba(0,0,0,0.2);
+	box-shadow: 4px 7px 13px -5px rgba(0,0,0,0.2);
+}
