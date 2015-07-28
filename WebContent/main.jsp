@@ -9,7 +9,9 @@
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/normalize.css">
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/skeleton.css">
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
+<script>var ctx = "${pageContext.request.contextPath}"</script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/main.js"></script>
+
 </head>
 <body>
 	<jsp:include page="/pages/header.jsp">
@@ -18,7 +20,7 @@
 	</jsp:include>
 	<div class="main-wrapper">
 		<div id="img-wrapper">
-			<canvas id="img-canvas" width="760" height="617"></canvas>
+			<canvas id="img-canvas"></canvas>
 			<img id ="map-img" src="${pageContext.request.contextPath}/images/bwb.png"/>
 		</div>
 		<div id="form-wrapper">
@@ -47,8 +49,12 @@
 				<option value="51">Schleswig-Holstein</option>
 				<option value="52">Thüringen</option>
 			</select>
-			<input type="hidden" name="coordinates" value="1,1">
-			<input type="submit" name="submit">
+			<input id="coordinates-input" type="hidden" name="coordinates" value="1,1">
+			<div id="submit-wrapper">
+				<input id="submit" type="submit" name="submit">
+				<input id ="reset" type="reset" name="reset">
+			</div>
+			
 			</fieldset>
 		</form>
 		</div>
