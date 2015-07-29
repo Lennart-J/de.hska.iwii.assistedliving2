@@ -31,7 +31,8 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	select.addEventListener("change", function() {
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		var img = document.getElementById("map-img");
-		img.src = ctx + "/images/" + bundeslandImages[parseInt(select.value)]+ ".png";		
+		img.src = ctx + "/images/" + bundeslandImages[parseInt(select.value)]+ ".png";
+		$('.thumbnail').css({visibility:"hidden"}).find('img').attr('src', '');
 	});
 	init_canvas();
 	document.getElementById("reset").addEventListener("click", reset);
@@ -156,5 +157,5 @@ function reset() {
 	var img = document.getElementById("map-img");
 	img.src = ctx + "/images/bwb.png";
 	context.clearRect(0, 0, canvas.width, canvas.height);
-	$('.thumbnail').css({visibility:"hidden"});
+	$('.thumbnail').css({visibility:"hidden"}).find('img').attr('src', '');
 }

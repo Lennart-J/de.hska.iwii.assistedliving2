@@ -16,6 +16,9 @@ body {
 }
 
 #img-wrapper {
+	width:760px;
+	height:617px;
+	overflow:hidden;
 	display: inline-block;
 	user-select: none;
 -webkit-user-select: none;
@@ -42,6 +45,11 @@ body {
 
 #bundesland {
 	display:block;
+}
+
+#map-img{
+	min-width:100%;
+	min-height:100%;
 }
 
 #date-input, #time-input {
