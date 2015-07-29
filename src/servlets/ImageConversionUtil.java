@@ -44,13 +44,13 @@ public class ImageConversionUtil {
 		return image;
 	}
 	
-	public static Mat img2Mat(BufferedImage in)
+	public static Mat img2Mat(BufferedImage in, boolean rgb)
     {
           Mat out;
           byte[] data;
           int r, g, b;
 
-          if(in.getType() == BufferedImage.TYPE_INT_RGB) //== 13 )//
+          if(rgb)//in.getType() == BufferedImage.TYPE_INT_RGB) 
           {
               out = new Mat(616, 760, CvType.CV_8UC3);
               data = new byte[760 * 616 * (int)out.elemSize()];

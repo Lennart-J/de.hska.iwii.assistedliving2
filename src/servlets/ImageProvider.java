@@ -43,7 +43,7 @@ public class ImageProvider {
 		
 		String user = properties.getProperty("name");
 		String pw = properties.getProperty("passwort");
-		System.out.println(user + " " + pw);
+		//System.out.println(user + " " + pw);
 		Authenticator.setDefault(
 				   new Authenticator() {
 				      public PasswordAuthentication getPasswordAuthentication() {
