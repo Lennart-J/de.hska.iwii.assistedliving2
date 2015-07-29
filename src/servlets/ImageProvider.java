@@ -2,10 +2,14 @@ package servlets;
 
 import java.awt.Image;
 import java.awt.image.BufferedImage;
+import java.io.BufferedInputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.Authenticator;
 import java.net.PasswordAuthentication;
 import java.net.URL;
 import java.util.Date;
+import java.util.Properties;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -13,9 +17,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 public class ImageProvider {
-	
-	private static final String user = "basi1015";
-	private static final String pw = "";
 	
 	public enum ImagePart { 
 		Deutschland(2), BW(37), Bayern(38), Berlin(39), Brandenburg(40), Bremen(41), Hamburg(42), Hessen(43), MecklenburgVorpommern(44),
@@ -33,6 +34,16 @@ public class ImageProvider {
 	
 	public ImageProvider()
 	{
+		Properties properties = new Properties();
+		try {
+			properties.load(getClass().getResourceAsStream("credentials.properties"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		String user = properties.getProperty("name");
+		String pw = properties.getProperty("passwort");
+		System.out.println(user + " " + pw);
 		Authenticator.setDefault(
 				   new Authenticator() {
 				      public PasswordAuthentication getPasswordAuthentication() {

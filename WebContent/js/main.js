@@ -21,6 +21,8 @@ var bundeslandImages = {
 };
 
 var canvas, context, select;
+var coordinates = "0,0";
+
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	select = document.getElementById("bundesland");
@@ -33,6 +35,7 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	});
 	init_canvas();
 	document.getElementById("reset").addEventListener("click", reset);
+	document.getElementById("submit").addEventListener("click", submit);
 });
 
 function init_canvas() {
@@ -51,12 +54,16 @@ function init_canvas() {
 	canvas.addEventListener("click", function(e) {
 //		var imageData = context.getImageData(0, 0, img.width, img.height);
 //      console.log(imageData);
-		context.clearRect(0, 0, canvas.width, canvas.height);
 		var mouseX = getMousePos(canvas, e)["x"];
 		var mouseY = getMousePos(canvas, e)["y"];
 		var radius = 2;
-		console.log(mouseX, mouseY);
-		document.getElementById("coordinates-input").value=mouseX + " " + mouseY;
+		context.clearRect(0, 0, canvas.width, canvas.height);
+		
+		//set value of hidden input field to coordinates so they get passed to the server
+		//document.getElementById("coordinates-input").value=mouseX + "," + mouseY;
+		coordinates = mouseX + "," + mouseY;
+		
+		//draw circle
 		context.beginPath();
 		context.arc(mouseX, mouseY, radius, 0, 2 * Math.PI, false);
 		context.fillStyle = 'red';
@@ -73,6 +80,18 @@ function init_canvas() {
 	        };
 	      }
 	});
+}
+
+function submit() {
+	//var now = new Date(); 
+	//var utc_date = now.getUTCFullYear() + "," + (now.getUTCMonth() + 1) + "," + now.getUTCDate() + "," + now.getUTCHours() + "," + now.getUTCMinutes();
+	var now = Date.now();
+	$.get('configure', 
+			{bundesland: select.value, coordinates: coordinates, date: now}, 
+			function(data) {
+				console.log(data);
+			}
+	);
 }
 
 function reset() {

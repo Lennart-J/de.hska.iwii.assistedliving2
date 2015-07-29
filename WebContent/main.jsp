@@ -10,6 +10,7 @@
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/skeleton.css">
 <link type="text/css" rel="stylesheet" href="${pageContext.request.contextPath}/css/main.css">
 <script>var ctx = "${pageContext.request.contextPath}"</script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/js/main.js"></script>
 
 </head>
@@ -51,7 +52,7 @@
 			</select>
 			<input id="coordinates-input" type="hidden" name="coordinates" value="1,1">
 			<div id="submit-wrapper">
-				<input id="submit" type="submit" name="submit">
+				<button id="submit" type="button" name="submit">Senden</button>
 				<input id ="reset" type="reset" name="reset">
 			</div>
 			
