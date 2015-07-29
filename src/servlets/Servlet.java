@@ -44,9 +44,9 @@ public class Servlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		System.out.println("Started");
 		ImageProvider provider = new ImageProvider();
-		BufferedImage img1 = provider.getImage("2015","07", "27", "14", "30");
-		BufferedImage img2 = provider.getImage("2015","07", "27", "14", "35");
-		BufferedImage img3 = provider.getImage("2015","07", "27", "14", "40");
+		BufferedImage img1 = provider.getImage("2015","06", "27", "04", "00");
+		BufferedImage img2 = provider.getImage("2015","06", "27", "04", "05");
+		BufferedImage img3 = provider.getImage("2015","06", "27", "04", "10");
 
 		
 		Mat src1 = ImageConversionUtil.img2Mat(img1);
@@ -70,30 +70,26 @@ public class Servlet extends HttpServlet {
 		for (int r = 0; r < destination1.rows(); r++) {
 			for (int c = 0; c < destination1.cols(); c++) {
 				
-				if (destination1.get(c, r) != null){
-					double[] values = destination1.get(c, r);
+				if (destination1.get(r, c) != null){
+					double[] values = destination1.get(r, c);
 					for (int j = 0; j < values.length; j++) {
 						if (values[j] != 0.0 && values[j] < Math.pow(10.0, 5) && values[j] > 0.1)
 						{
 							if (j == 0)
 							{
-								dataX[destination1.cols()*r+c] = 0xAAAAAA;
+								refImgX.setRGB(c, r, 0xFFFFFF);
 							}
 							else
 							{
-								dataY[destination1.cols()*r+c] = 0xAAAAAA;
+								refImgY.setRGB(c, r, 0xFFFFFF);
 							}
 						}
 					}
 				}
 			} 
 		}
-//		WritableRaster raster = (WritableRaster) refImgX.getData();
-//        raster.setPixels(0,0,destination1.cols(),destination1.rows(),dataX);
-        refImgX.setRGB(0, 0, destination1.cols(), destination1.rows(), dataX, 0, destination1.cols());
-		refImgY.setRGB(0, 0, destination1.cols(), destination1.rows(), dataY, 0, destination1.cols());
 		
-		BufferedImage newImg = ImageConversionUtil.mat2Img(src1);
+		BufferedImage newImg = ImageConversionUtil.mat2Img(src3);
 		
 		if (newImg != null)
 		{
