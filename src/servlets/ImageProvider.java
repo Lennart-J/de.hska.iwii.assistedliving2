@@ -15,7 +15,7 @@ import javax.swing.JLabel;
 public class ImageProvider {
 	
 	private static final String user = "basi1015";
-	private static final String pw = "ef5Xq94e";
+	private static final String pw = "";
 	
 	public enum ImagePart { 
 		Deutschland(2), BW(37), Bayern(38), Berlin(39), Brandenburg(40), Bremen(41), Hamburg(42), Hessen(43), MecklenburgVorpommern(44),
