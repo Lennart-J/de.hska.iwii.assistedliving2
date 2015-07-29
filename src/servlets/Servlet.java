@@ -57,8 +57,6 @@ public class Servlet extends HttpServlet {
 		
 		//do stuff with mat
 		Mat destination1 = new Mat(src1.rows(), src1.cols(),0);
-		System.out.println(src1.type() + " - " + img1.getType());
-		System.out.println(src1.channels() + " jo");
 
 		Video.calcOpticalFlowFarneback(src1,src3,destination1,0.5 ,3 ,5 ,3 ,5 ,1.1 ,0 );
 		
@@ -69,27 +67,27 @@ public class Servlet extends HttpServlet {
 		// prognosebild erstellen
 		BufferedImage progSrc = removeGreyBackground(img3);
 		BufferedImage prog = getProgImage(destination1, progSrc);
+		// closing & opening auf prognosebild
+		Mat morphMatSrc = ImageConversionUtil.img2Mat(prog, false);
+		Mat morphMatDst = new Mat(morphMatSrc.rows(), morphMatSrc.cols(),0);
+		Mat kernel20 = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(20,20));
+		Mat kernel10 = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(10,10));
+		Imgproc.morphologyEx(morphMatSrc, morphMatDst, Imgproc.MORPH_CLOSE, kernel20);
+		Imgproc.morphologyEx(morphMatDst, morphMatDst, Imgproc.MORPH_OPEN, kernel10);
 		
-		BufferedImage newImg = ImageConversionUtil.mat2Img(src3);
+		BufferedImage newImg = ImageConversionUtil.mat2Img(morphMatDst);
 		
 		if (newImg != null)
 		{
 		JDialog dialog = new JDialog();
-		ImageIcon icon = new ImageIcon(prog);
+		ImageIcon icon = new ImageIcon(newImg);
 		JLabel label = new JLabel(icon);
 		dialog.add( label );
 		dialog.pack();
 		dialog.setVisible(true);
 		
 		}
-		else
-		{
-			System.out.println("NULL!!");
-		}
 		
-		response.getWriter().append("Served at: ").append(request.getContextPath());
-		Mat m  = Mat.eye(3, 3, CvType.CV_8UC1);
-	    System.out.println("m = " + m.dump());
 	}
 
 	private BufferedImage removeGreyBackground(BufferedImage src) {
@@ -97,7 +95,7 @@ public class Servlet extends HttpServlet {
 		noBgImg = src;
 		for (int x = 0; x < noBgImg.getWidth(); x++) {
 			for (int y = 0; y < noBgImg.getHeight(); y++) {
-				if (noBgImg.getRGB(x,y) == -9539986)
+				if (noBgImg.getRGB(x,y) == -9539986 || noBgImg.getRGB(x, y) == -16777216 )
 				{
 					noBgImg.setRGB(x, y, 0x000000);
 				}
