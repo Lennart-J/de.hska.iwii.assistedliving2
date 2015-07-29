@@ -22,7 +22,8 @@ var bundeslandImages = {
 
 var canvas, context, select;
 var coordinates = "0,0";
-
+var url = "http://kachelmannwetter.com/images/data/cache/px250/px250_2015_07_27_37_0800.png";
+var year, month, day, hours, minutes;
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	select = document.getElementById("bundesland");
@@ -36,6 +37,10 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	init_canvas();
 	document.getElementById("reset").addEventListener("click", reset);
 	document.getElementById("submit").addEventListener("click", submit);
+	
+	$('.thumbnail').on('hover', function() {
+		img.src 
+	})
 });
 
 function init_canvas() {
@@ -83,15 +88,57 @@ function init_canvas() {
 }
 
 function submit() {
-	//var now = new Date(); 
-	//var utc_date = now.getUTCFullYear() + "," + (now.getUTCMonth() + 1) + "," + now.getUTCDate() + "," + now.getUTCHours() + "," + now.getUTCMinutes();
-	var now = Date.now();
+	var date;
+	var dateInput = $('#date-input').val();
+	var timeInput = $('#time-input').val();
+	
+	if (dateInput != '' && timeInput != '') {
+		date = new Date(dateInput + " " + timeInput).getTime();
+		//console.log(new Date(dateInput + " " + timeInput), date);
+	} else {
+		date = Date.now();
+	}
+	
+	
+	var url1 = constructUrl(date);
+	//url zum Bild 10 Minuten zuvor
+	var url2 = constructUrl(date - 600000);
+	
+	//Testbilder
+	//"http://kachelmannwetter.com/images/data/cache/px250/px250_2015_06_27_37_0400.png"
+	//"http://kachelmannwetter.com/images/data/cache/px250/px250_2015_06_27_37_0410.png"
+	
 	$.get('configure', 
-			{bundesland: select.value, coordinates: coordinates, date: now}, 
+			{bundesland: select.value, coordinates: coordinates, url1: url1, url2: url2}, 
 			function(data) {
 				console.log(data);
 			}
 	);
+}
+
+function constructUrl(date) {
+	var baseDate = new Date(date);
+	year = baseDate.getFullYear();
+	month = baseDate.getMonth();
+	if (month < 10) month = "0" + month;
+	day = baseDate.getDate();
+	if (day < 10) day = "0" + day;
+	hours = Math.floor((date / (1000*60*60)) % 24);
+	if (hours < 10) hours = "0" + hours;
+	minutes = Math.floor((date / (1000*60)) % 60);
+	minutes -= minutes % 5;
+	if (minutes < 10) minutes = "0" + minutes;
+	url = "http://kachelmannwetter.com/images/data/cache/px250/px250_";
+	//TODO thumbnail url..
+	url += year + "_";
+	url += month + "_";
+	url += day + "_";
+	url += parseInt(select.value) + "_";
+	url += hours;
+	url += minutes;
+	url += ".png";
+	console.log(url);
+	return url;
 }
 
 function reset() {
