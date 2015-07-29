@@ -38,7 +38,7 @@
 				<option value="39">Berlin</option>
 				<option value="40">Brandenburg</option>
 				<option value="41">Bremen</option>
-				<option value="42">Hambrg</option>
+				<option value="42">Hamburg</option>
 				<option value="43">Hessen</option>
 				<option value="44">Mecklenburg-Vorpommern</option>
 				<option value="45">Niedersachsen</option>
@@ -70,11 +70,11 @@
 		
 		<fieldset class="wrapper-box">
 			<legend>Benutzte Bilder</legend>
-			<a class="thumbnail" href="http://kachelmannwetter.com/images/data/cache/px250/px250_2015_07_27_37_0800.png">
-				<img width=75 height=75 src="http://kachelmannwetter.com/images/data/cache/px250/download_px250_2015_07_27_37_0800.png">
+			<a id="first-thumb" class="thumbnail" href="#">
+				<img width=75 height=75 src="">
 			</a>
-			<a class="thumbnail" href="http://kachelmannwetter.com/images/data/cache/px250/px250_2015_07_27_37_0810.png">
-				<img width=75 height=75 src="http://kachelmannwetter.com/images/data/cache/px250/download_px250_2015_07_27_37_0800.png">
+			<a  id="second-thumb" class="thumbnail" href="#">
+				<img width=75 height=75 src="">
 			</a>
 		</fieldset>
 		</div>

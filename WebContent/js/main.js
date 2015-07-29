@@ -22,25 +22,27 @@ var bundeslandImages = {
 
 var canvas, context, select;
 var coordinates = "0,0";
-var url = "http://kachelmannwetter.com/images/data/cache/px250/px250_2015_07_27_37_0800.png";
+var url = "";
 var year, month, day, hours, minutes;
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	select = document.getElementById("bundesland");
 	console.log(select);
 	select.addEventListener("change", function() {
-		var id = parseInt(select.value);
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		var img = document.getElementById("map-img");
-		img.src = ctx + "/images/" + bundeslandImages[id]+ ".png";		
+		img.src = ctx + "/images/" + bundeslandImages[parseInt(select.value)]+ ".png";		
 	});
 	init_canvas();
 	document.getElementById("reset").addEventListener("click", reset);
 	document.getElementById("submit").addEventListener("click", submit);
 	
-	$('.thumbnail').on('hover', function() {
-		img.src 
-	})
+	$('.thumbnail').on('mouseover', function() {
+		$('#map-img').attr('src', $(this).find('img').attr('src'));
+	});
+	$('.thumbnail').on('mouseleave', function() {
+		$('#map-img').attr('src', ctx + "/images/" + bundeslandImages[parseInt(select.value)]+ ".png");	
+	});
 });
 
 function init_canvas() {
@@ -53,7 +55,7 @@ function init_canvas() {
 	img.onload = function() {
 		canvas.width = img.width;
 		canvas.height = img.height;
-		context.clearRect(0, 0, canvas.width, canvas.height);
+		img.onload = null;
 	};
 
 	canvas.addEventListener("click", function(e) {
@@ -100,23 +102,29 @@ function submit() {
 	}
 	
 	
-	var url1 = constructUrl(date);
+	var urls1 = constructUrls(date);
 	//url zum Bild 10 Minuten zuvor
-	var url2 = constructUrl(date - 600000);
+	var urls2 = constructUrls(date - 600000);
 	
+	$('#first-thumb').attr('href', urls2[1]);
+	$('#first-thumb img').attr('src', urls2[0]);
+	$('#second-thumb').attr('href', urls1[1]);
+	$('#second-thumb img').attr('src', urls1[0]);
+	$('.thumbnail').css({visibility:"visible"});
 	//Testbilder
 	//"http://kachelmannwetter.com/images/data/cache/px250/px250_2015_06_27_37_0400.png"
 	//"http://kachelmannwetter.com/images/data/cache/px250/px250_2015_06_27_37_0410.png"
 	
 	$.get('configure', 
-			{bundesland: select.value, coordinates: coordinates, url1: url1, url2: url2}, 
+			{bundesland: select.value, coordinates: coordinates, url1: urls1[1], url2: urls2[1]}, 
 			function(data) {
 				console.log(data);
 			}
 	);
 }
 
-function constructUrl(date) {
+function constructUrls(date) {
+	var urls = [];
 	var baseDate = new Date(date);
 	year = baseDate.getFullYear();
 	month = baseDate.getMonth();
@@ -128,8 +136,8 @@ function constructUrl(date) {
 	minutes = Math.floor((date / (1000*60)) % 60);
 	minutes -= minutes % 5;
 	if (minutes < 10) minutes = "0" + minutes;
-	url = "http://kachelmannwetter.com/images/data/cache/px250/px250_";
-	//TODO thumbnail url..
+	
+	url = "http://kachelmannwetter.com/images/data/cache/px250/download_px250_";
 	url += year + "_";
 	url += month + "_";
 	url += day + "_";
@@ -137,12 +145,16 @@ function constructUrl(date) {
 	url += hours;
 	url += minutes;
 	url += ".png";
-	console.log(url);
-	return url;
+	
+	urls.push(url);
+	urls.push(url.replace(/download_/, ""))
+	
+	return urls;
 }
 
 function reset() {
 	var img = document.getElementById("map-img");
 	img.src = ctx + "/images/bwb.png";
 	context.clearRect(0, 0, canvas.width, canvas.height);
+	$('.thumbnail').css({visibility:"hidden"});
 }
