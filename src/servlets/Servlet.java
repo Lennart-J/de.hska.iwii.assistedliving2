@@ -5,6 +5,9 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
 import java.io.IOException;
+import java.io.OutputStream;
+
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -70,7 +73,11 @@ public class Servlet extends HttpServlet {
 		boolean raining = isRainingInNextStep(morphProg, Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
 		System.out.println(raining);
 		
-
+		response.setHeader("Content-Type", "image/jpeg");
+		OutputStream os = response.getOutputStream();
+		ImageIO.write(prog, "jpg", os);
+		os.close();
+		
 //		if (morphProg != null) {
 //			JDialog dialog = new JDialog();
 //			ImageIcon icon = new ImageIcon(morphProg);
