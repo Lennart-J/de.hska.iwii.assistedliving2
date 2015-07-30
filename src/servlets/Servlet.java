@@ -11,6 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.PrintWriter;
 
 import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
@@ -80,16 +81,21 @@ public class Servlet extends HttpServlet {
 		boolean raining = isRainingInNextStep(morphProg, Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
 		System.out.println(raining);
 		
-			ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-		    ImageIO.write(prog, "png", tmp);
-		    tmp.close();
-		    Integer contentLength = tmp.size();
-
-		    response.setContentType("image/png");
-		    response.setHeader("Content-Length",contentLength.toString());
-		    OutputStream out = response.getOutputStream();
-		    out.write(tmp.toByteArray());
-		    out.close();
+		PrintWriter out = response.getWriter();
+		out.print(raining);
+		out.flush();
+		
+		//try 2
+//			ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+//		    ImageIO.write(prog, "png", tmp);
+//		    tmp.close();
+//		    Integer contentLength = tmp.size();
+//
+//		    response.setContentType("image/png");
+//		    response.setHeader("Content-Length",contentLength.toString());
+//		    OutputStream out = response.getOutputStream();
+//		    out.write(tmp.toByteArray());
+//		    out.close();
 		
 		
 		//try1
