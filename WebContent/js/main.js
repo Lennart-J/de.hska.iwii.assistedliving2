@@ -2,6 +2,7 @@
  * 
  */
 var bundeslandImages = {
+	2 : "deutschland",
 	37 : "bwb",
 	38 : "bayern",
 	39 : "berlin",

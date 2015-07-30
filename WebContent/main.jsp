@@ -30,6 +30,7 @@
 			<legend>Konfiguration:</legend>
 			<label for="bundesland">Bundesland:</label>
 			<select id="bundesland" name="bundesland">
+				<option selected value="2">Deutschland</option>
 				<option selected value="37">Baden-Würtemberg</option>
 				<option value="38">Bayern</option>
 				<option value="39">Berlin</option>
