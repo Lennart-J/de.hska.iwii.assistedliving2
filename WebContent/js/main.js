@@ -136,6 +136,7 @@ function submit() {
 				var msg = "";
 				if (data["raining"]) {
 					msg = "Es regnet bald!"
+					document.getElementById("alarm").play();
 				} else {
 					msg = "Es bleibt trocken."
 				}
