@@ -32,7 +32,7 @@ body {
     padding: 5px;
     padding-top: 0;
     margin-top: -10px;
-	
+    min-width: 400px;
 }
  #img-canvas {
 	position:absolute;

@@ -130,8 +130,16 @@ function submit() {
 	$.get('configure', 
 			{bundesland: select.value, coordinates: coordinates, url1: urls1[1], url2: urls2[1]}, 
 			function(data) {
-				//console.log("Data: ", data);
-				$("#third-thumb img").attr("src","data:image/jpeg;base64," + data);
+				console.log("Data: ", data);
+				$("#third-thumb img").attr("src","data:image/png;base64," + data["prog"]);
+				$("#fourth-thumb img").attr("src","data:image/png;base64," + data["morphProg"]);
+				var msg = "";
+				if (data["raining"]) {
+					msg = "Es regnet bald!"
+				} else {
+					msg = "Es bleibt trocken."
+				}
+				$("#message").html(msg);
 			}
 	);
 }
