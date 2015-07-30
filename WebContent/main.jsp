@@ -28,9 +28,6 @@
 			<form action="configure" method="GET">
 			<fieldset id="config-form" class="wrapper-box">
 			<legend>Konfiguration:</legend>
-			<p>
-				Bitte wählen sie per Mausklick einen Ort auf der Karte aus!
-			</p>
 			<label for="bundesland">Bundesland:</label>
 			<select id="bundesland" name="bundesland">
 				<option selected value="37">Baden-Würtemberg</option>
@@ -54,18 +51,19 @@
 			<label for="date">Gewünschte Zeit:</label>
 			<input id="date-input" name="date" type="date">
 			<input id="time-input" name="time" type="time" step ="300">
+			<label for="interval">Zeitintervall:</label>
+			<input id="interval-input" name="interval" type="time" min="00:10" value="00:10"  step ="300">
 			<input id="coordinates-input" type="hidden" name="coordinates" value="1,1">
 			<div id="submit-wrapper">
 				<button id="submit" type="button" name="submit">Senden</button>
 				<input id ="reset" type="reset" name="reset">
 			</div>
-			
 			</fieldset>
 		</form>
 		
 		<fieldset class="wrapper-box">
 			<legend>Benachrichtigung:</legend>
-			<p id="message">Kein Regen in den nächsten 10 Minuten!</p>
+			<p id="message">Bitte wählen sie per Mausklick einen Ort auf der Karte aus!</p>
 		</fieldset>
 		
 		<fieldset class="wrapper-box">

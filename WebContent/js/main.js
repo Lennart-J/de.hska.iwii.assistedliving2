@@ -24,8 +24,11 @@ var canvas, context, select;
 var coordinates = "0,0";
 var url = "";
 var year, month, day, hours, minutes;
+var test;
 
 document.addEventListener("DOMContentLoaded", function(event) {
+	test = $('#interval-input');
+	console.log(test);
 	select = document.getElementById("bundesland");
 	console.log(select);
 	select.addEventListener("change", function() {
@@ -43,6 +46,11 @@ document.addEventListener("DOMContentLoaded", function(event) {
 	});
 	$('.thumbnail').on('mouseleave', function() {
 		$('#map-img').attr('src', ctx + "/images/" + bundeslandImages[parseInt(select.value)]+ ".png");	
+	});
+	$('#interval-input').on('change', function() {
+		if ($(this).val() < this.min) {
+          $(this).val(this.min);
+		}     
 	});
 });
 
@@ -148,7 +156,7 @@ function constructUrls(date) {
 	url += ".png";
 	
 	urls.push(url);
-	urls.push(url.replace(/download_/, ""))
+	urls.push(url.replace(/download_/, ""));
 	
 	return urls;
 }
