@@ -24,6 +24,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import org.opencv.core.Core;
+import org.apache.tomcat.util.codec.binary.Base64;
 import org.opencv.core.*;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -31,7 +32,7 @@ import org.opencv.imgproc.*;
 import org.opencv.photo.*;
 import org.opencv.video.Video;
 
-import com.sun.org.apache.xml.internal.security.utils.Base64;
+
 
 /**
  * Servlet implementation class Servlet
@@ -39,7 +40,8 @@ import com.sun.org.apache.xml.internal.security.utils.Base64;
 @WebServlet("/Servlet")
 public class Servlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-
+	private ImageProvider provider;
+	
 	static {
 		System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 	}
@@ -49,7 +51,7 @@ public class Servlet extends HttpServlet {
 	 */
 	public Servlet() {
 		super();
-		// TODO Auto-generated constructor stub
+		this.provider = new ImageProvider();
 	}
 
 	/**
@@ -74,68 +76,31 @@ public class Servlet extends HttpServlet {
 			System.out.println("bundesland " + bundeslandParam + " coords: " + coords[0] + " " + coords[1]);
 		}
 
-		ImageProvider provider = new ImageProvider();
+		
 		BufferedImage prog = getPrognose(url2, url1, provider);
 		BufferedImage morphProg = makeOpeningAndClosing(prog);
+		BufferedImage progTransBack = replaceGreyBackground(prog, -9539986);
+		
 
 		boolean raining = isRainingInNextStep(morphProg, Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
 		System.out.println(raining);
 		
-		PrintWriter out = response.getWriter();
-		out.print(raining);
-		out.flush();
-		
-		//try 2
-//			ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-//		    ImageIO.write(prog, "png", tmp);
-//		    tmp.close();
-//		    Integer contentLength = tmp.size();
-//
-//		    response.setContentType("image/png");
-//		    response.setHeader("Content-Length",contentLength.toString());
-//		    OutputStream out = response.getOutputStream();
-//		    out.write(tmp.toByteArray());
-//		    out.close();
-		
-		
-		//try1
-//		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-//	    ImageIO.write(prog, "gif", tmp);
-//	    tmp.close();
-//	    Integer contentLength = tmp.size();
-//		
-//		response.setHeader("Content-Type", "image/gif");
-//		response.setHeader("Content-Length", contentLength.toString());
-//
-//		BufferedInputStream input = null;
-//		BufferedOutputStream output = null;
-//
-//		try {
-//			ByteArrayOutputStream os = new ByteArrayOutputStream();
-//			ImageIO.write(prog, "gif", os);
-//			InputStream is = new ByteArrayInputStream(os.toByteArray());
-//			
-//		    input = new BufferedInputStream(is);
-//		    output = new BufferedOutputStream(response.getOutputStream());
-//		    byte[] buffer = new byte[8192];
-//		    for (int length = 0; (length = input.read(buffer)) > 0;) {
-//		        output.write(buffer, 0, length);
-//		    }
-//		} finally {
-//		    if (output != null) try { output.close(); } catch (IOException logOrIgnore) {}
-//		    if (input != null) try { input.close(); } catch (IOException logOrIgnore) {}
-//		}
-		
-//		if (morphProg != null) {
-//			JDialog dialog = new JDialog();
-//			ImageIcon icon = new ImageIcon(morphProg);
-//			JLabel label = new JLabel(icon);
-//			dialog.add(label);
-//			dialog.pack();
-//			dialog.setVisible(true);
-//
-//		}
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+	    ImageIO.write(progTransBack, "png", tmp);
+	    tmp.close();
+	    
+	    ByteArrayOutputStream tmp2 = new ByteArrayOutputStream();
+	    ImageIO.write(morphProg, "png", tmp2);
+	    tmp2.close();
 
+	    response.setContentType("application/json");
+	    //response.setHeader("Content-Length",contentLength.toString());
+	    PrintWriter out = response.getWriter();
+	    
+	    String json = toJSON(raining, Base64.encodeBase64String(tmp.toByteArray()), Base64.encodeBase64String(tmp2.toByteArray()));//Base64.encode(tmp.toByteArray())
+	    System.out.println(json);
+	    out.write(json); //
+	    out.close();
 	}
 
 	private BufferedImage makeOpeningAndClosing(BufferedImage prog) {
@@ -187,7 +152,7 @@ public class Servlet extends HttpServlet {
 	}
 
 	private BufferedImage replaceGreyBackground(BufferedImage src, int replacement) {
-		BufferedImage noBgImg = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+		BufferedImage noBgImg = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_4BYTE_ABGR);
 		noBgImg = src;
 		for (int x = 0; x < noBgImg.getWidth(); x++) {
 			for (int y = 0; y < noBgImg.getHeight(); y++) {
@@ -234,6 +199,10 @@ public class Servlet extends HttpServlet {
 		}
 
 		return refImg;
+	}
+	
+	private String toJSON(boolean bool, String str1, String str2) {
+		return "{\"raining\": " + bool + ", \"prog\": \""+ str1 +"\", \"morphProg\": \""+ str2 + "\" }";
 	}
 
 	/**
