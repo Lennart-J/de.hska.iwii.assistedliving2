@@ -19,15 +19,71 @@ import javax.swing.JLabel;
 public class ImageProvider {
 	
 	public enum ImagePart { 
-		Deutschland(2), BW(37), Bayern(38), Berlin(39), Brandenburg(40), Bremen(41), Hamburg(42), Hessen(43), MecklenburgVorpommern(44),
-		Niedersachsen(45), NordrheinWestfalen(46), RheinlandPfalz(47), Saarland(48), Sachsen(49), Sachsenanhalt(50), SchleswigHolstein(51), 
-		Thueringen(52);
+		Deutschland(2, "deutschland"), BW(37,"bwb"), Bayern(38,"bayern"), Berlin(39,"berlin"), Brandenburg(40,"brandenburg"), Bremen(41,"bremen"), Hamburg(42,"hamburg"), Hessen(43,"hessen"), MecklenburgVorpommern(44,"mecklenburg-vorpommern"),
+		Niedersachsen(45, "niedersachsen"), NordrheinWestfalen(46, "nrw"), RheinlandPfalz(47, "reihnland-pfalt"), Saarland(48,"saarland"), Sachsen(49,"sachsen"), Sachsenanhalt(50,"sachsenanhalt"), SchleswigHolstein(51,"schleswigholstein"), 
+		Thueringen(52,"thüringen");
 	
 	private final int id;
+	private final String filename;
 
-    private ImagePart(int id) {
+    private ImagePart(int id, String filename) {
         this.id = id;
+        this.filename = filename;
     	}
+    
+    public String getFilename()
+    {
+    	return filename;
+    }
+    
+    public String getFilePathOfPng()
+    {
+    	return "/images/" + filename + ".png";
+    }
+    
+    public static ImagePart getImagePartById(int idOfPArt)
+    {
+    	switch (idOfPArt) {
+		case 2:
+			return Deutschland;
+		case 37:
+			return BW;
+		case 38:
+			return Bayern;
+		case 39:
+			return Berlin;
+		case 40:
+			return Brandenburg;
+		case 41:
+			return Bremen;
+		case 42:
+			return Hamburg;
+		case 43:
+			return Hessen;
+		case 44:
+			return MecklenburgVorpommern;
+		case 45:
+			return Niedersachsen;
+		case 46:
+			return NordrheinWestfalen;
+		case 47:
+			return RheinlandPfalz;
+		case 48:
+			return Saarland;
+		case 49:
+			return Sachsen;
+		case 50:
+			return Sachsenanhalt;
+		case 51:
+			return ImagePart.SchleswigHolstein;
+		case 52:
+			return Thueringen;
+
+		default:
+			break;
+		}
+    	return BW;
+    }
 	
 	}
 	

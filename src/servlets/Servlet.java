@@ -8,6 +8,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -79,14 +80,15 @@ public class Servlet extends HttpServlet {
 		
 		BufferedImage prog = getPrognose(url2, url1, provider);
 		BufferedImage morphProg = makeOpeningAndClosing(prog);
-		BufferedImage progTransBack = replaceGreyBackground(prog, -9539986);
+		BufferedImage progGreyBack = replaceGreyBackground(prog, -9539986);
+		progGreyBack  = addCountryBoarders(Integer.parseInt(bundeslandParam), progGreyBack);
 		
 
 		boolean raining = isRainingInNextStep(morphProg, Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
 		System.out.println(raining);
 		
 		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-	    ImageIO.write(progTransBack, "png", tmp);
+	    ImageIO.write(progGreyBack, "png", tmp);
 	    tmp.close();
 	    
 	    ByteArrayOutputStream tmp2 = new ByteArrayOutputStream();
@@ -101,6 +103,18 @@ public class Servlet extends HttpServlet {
 	    System.out.println(json);
 	    out.write(json); //
 	    out.close();
+	}
+
+	private BufferedImage addCountryBoarders(int id, BufferedImage src) {
+		String filepath = ImageProvider.ImagePart.getImagePartById(id).getFilePathOfPng();
+		String realFilepath = this.getServletContext().getRealPath(filepath);
+		BufferedImage img = null;
+		try {
+			img = ImageIO.read(new File(realFilepath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	
+		return img;
 	}
 
 	private BufferedImage makeOpeningAndClosing(BufferedImage prog) {
