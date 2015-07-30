@@ -82,8 +82,7 @@
 			</a>
 		</fieldset>
 		</div>
-		<embed  id ="alarm" src="${pageContext.request.contextPath}/music/alien_siren.mp3" autoplay="false" width="240" height="160" hidden="true">
-		</embed>
+		<audio  id ="alarm" src="${pageContext.request.contextPath}/music/alien_siren.mp3" hidden="true"></audio>
 		
 	</div>
 <jsp:include page="/pages/footer.jsp">
