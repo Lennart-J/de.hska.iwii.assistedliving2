@@ -130,7 +130,8 @@ function submit() {
 	$.get('configure', 
 			{bundesland: select.value, coordinates: coordinates, url1: urls1[1], url2: urls2[1]}, 
 			function(data) {
-				console.log(data);
+				//console.log("Data: ", data);
+				$("#third-thumb img").attr("src","data:image/jpeg;base64," + data);
 			}
 	);
 }
