@@ -4,7 +4,12 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.awt.image.WritableRaster;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.imageio.ImageIO;
@@ -24,6 +29,8 @@ import org.opencv.core.Mat;
 import org.opencv.imgproc.*;
 import org.opencv.photo.*;
 import org.opencv.video.Video;
+
+import com.sun.org.apache.xml.internal.security.utils.Base64;
 
 /**
  * Servlet implementation class Servlet
@@ -73,10 +80,34 @@ public class Servlet extends HttpServlet {
 		boolean raining = isRainingInNextStep(morphProg, Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
 		System.out.println(raining);
 		
-		response.setHeader("Content-Type", "image/jpeg");
-		OutputStream os = response.getOutputStream();
-		ImageIO.write(prog, "jpg", os);
-		os.close();
+		
+		
+		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+	    ImageIO.write(prog, "gif", tmp);
+	    tmp.close();
+	    Integer contentLength = tmp.size();
+		
+		response.setHeader("Content-Type", "image/gif");
+		response.setHeader("Content-Length", contentLength.toString());
+
+		BufferedInputStream input = null;
+		BufferedOutputStream output = null;
+
+		try {
+			ByteArrayOutputStream os = new ByteArrayOutputStream();
+			ImageIO.write(prog, "gif", os);
+			InputStream is = new ByteArrayInputStream(os.toByteArray());
+			
+		    input = new BufferedInputStream(is);
+		    output = new BufferedOutputStream(response.getOutputStream());
+		    byte[] buffer = new byte[8192];
+		    for (int length = 0; (length = input.read(buffer)) > 0;) {
+		        output.write(buffer, 0, length);
+		    }
+		} finally {
+		    if (output != null) try { output.close(); } catch (IOException logOrIgnore) {}
+		    if (input != null) try { input.close(); } catch (IOException logOrIgnore) {}
+		}
 		
 //		if (morphProg != null) {
 //			JDialog dialog = new JDialog();
