@@ -113,7 +113,9 @@ function submit() {
 	
 	var urls1 = constructUrls(date);
 	//url zum Bild 10 Minuten zuvor
-	var urls2 = constructUrls(date - 600000);
+	var intervalArr = $('#interval-input').val().split(':');
+	var intervalMiliseconds = parseInt(intervalArr[0]) * 3600000 + parseInt(intervalArr[1]) * 60000;
+	var urls2 = constructUrls(date - intervalMiliseconds);
 	
 	$('#first-thumb').attr('href', urls2[1]);
 	$('#first-thumb img').attr('src', urls2[0]);
