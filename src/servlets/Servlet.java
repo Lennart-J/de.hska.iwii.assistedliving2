@@ -44,6 +44,18 @@ public class Servlet extends HttpServlet {
 		// TODO Auto-generated method stub
 		System.out.println("Started");
 		
+		String bundeslandParam = request.getParameter("bundesland");
+		String coordParam = request.getParameter("coordinates");
+		String url1 = request.getParameter("url1");
+		String url2 = request.getParameter("url2");
+		if (bundeslandParam != null && coordParam != null && url1 != null && url2 != null) {
+			System.out.println("url1: " + url1);
+			System.out.println("url2: " + url2);
+
+			String[] coords = coordParam.split("\\s*,\\s*");
+			System.out.println("bundesland " + bundeslandParam + " coords: " + coords[0] + " " + coords[1]);
+		}
+		
 		BufferedImage prog = getPrognose("http://kachelmannwetter.com/images/data/cache/px250/px250_2015_06_27_37_0400.png","http://kachelmannwetter.com/images/data/cache/px250/px250_2015_06_27_37_0410.png");
 		BufferedImage morphProg = makeOpeningAndClosing(prog);
 		
