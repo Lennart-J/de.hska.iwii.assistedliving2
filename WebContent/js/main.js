@@ -191,5 +191,6 @@ function reset() {
 	img.src = ctx + "/images/bwb.png";
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	$('.thumbnail').css({visibility:"hidden"}).find('img').attr('src', '');
+	$("#message").html("Bitte wählen sie per Mausklick einen Ort auf der Karte aus!");
 	timer = null;
 }
