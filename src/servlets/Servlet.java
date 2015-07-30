@@ -80,34 +80,45 @@ public class Servlet extends HttpServlet {
 		boolean raining = isRainingInNextStep(morphProg, Integer.parseInt(coords[0]), Integer.parseInt(coords[1]));
 		System.out.println(raining);
 		
-		
-		
-		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
-	    ImageIO.write(prog, "gif", tmp);
-	    tmp.close();
-	    Integer contentLength = tmp.size();
-		
-		response.setHeader("Content-Type", "image/gif");
-		response.setHeader("Content-Length", contentLength.toString());
+			ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+		    ImageIO.write(prog, "png", tmp);
+		    tmp.close();
+		    Integer contentLength = tmp.size();
 
-		BufferedInputStream input = null;
-		BufferedOutputStream output = null;
-
-		try {
-			ByteArrayOutputStream os = new ByteArrayOutputStream();
-			ImageIO.write(prog, "gif", os);
-			InputStream is = new ByteArrayInputStream(os.toByteArray());
-			
-		    input = new BufferedInputStream(is);
-		    output = new BufferedOutputStream(response.getOutputStream());
-		    byte[] buffer = new byte[8192];
-		    for (int length = 0; (length = input.read(buffer)) > 0;) {
-		        output.write(buffer, 0, length);
-		    }
-		} finally {
-		    if (output != null) try { output.close(); } catch (IOException logOrIgnore) {}
-		    if (input != null) try { input.close(); } catch (IOException logOrIgnore) {}
-		}
+		    response.setContentType("image/png");
+		    response.setHeader("Content-Length",contentLength.toString());
+		    OutputStream out = response.getOutputStream();
+		    out.write(tmp.toByteArray());
+		    out.close();
+		
+		
+		//try1
+//		ByteArrayOutputStream tmp = new ByteArrayOutputStream();
+//	    ImageIO.write(prog, "gif", tmp);
+//	    tmp.close();
+//	    Integer contentLength = tmp.size();
+//		
+//		response.setHeader("Content-Type", "image/gif");
+//		response.setHeader("Content-Length", contentLength.toString());
+//
+//		BufferedInputStream input = null;
+//		BufferedOutputStream output = null;
+//
+//		try {
+//			ByteArrayOutputStream os = new ByteArrayOutputStream();
+//			ImageIO.write(prog, "gif", os);
+//			InputStream is = new ByteArrayInputStream(os.toByteArray());
+//			
+//		    input = new BufferedInputStream(is);
+//		    output = new BufferedOutputStream(response.getOutputStream());
+//		    byte[] buffer = new byte[8192];
+//		    for (int length = 0; (length = input.read(buffer)) > 0;) {
+//		        output.write(buffer, 0, length);
+//		    }
+//		} finally {
+//		    if (output != null) try { output.close(); } catch (IOException logOrIgnore) {}
+//		    if (input != null) try { input.close(); } catch (IOException logOrIgnore) {}
+//		}
 		
 //		if (morphProg != null) {
 //			JDialog dialog = new JDialog();
