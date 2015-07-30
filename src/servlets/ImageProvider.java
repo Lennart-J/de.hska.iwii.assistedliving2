@@ -94,6 +94,7 @@ public class ImageProvider {
 		BufferedImage image = null;
 		URL url;
 		try {
+			System.out.println(urlOfImage);
 			url = new URL(urlOfImage); 
 			image = ImageIO.read(url);
 			BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
