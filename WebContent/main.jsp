@@ -74,6 +74,9 @@
 			<a  id="second-thumb" class="thumbnail" href="#">
 				<img width=75 height=75 src="">
 			</a>
+			<a  id="third-thumb" class="thumbnail" href="#">
+				<img width=75 height=75 src="">
+			</a>
 		</fieldset>
 		</div>
 		
