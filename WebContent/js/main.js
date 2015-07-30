@@ -24,7 +24,8 @@ var canvas, context, select;
 var coordinates = "0,0";
 var url = "";
 var year, month, day, hours, minutes;
-var test;
+var test
+var timer;
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	test = $('#interval-input');
@@ -148,6 +149,10 @@ function submit() {
 				$("#message").html(msg);
 			}
 	);
+	
+	timer = setTimeout(function() {
+		submit();
+	}, 600000);
 }
 
 function constructUrls(date) {
@@ -185,4 +190,5 @@ function reset() {
 	img.src = ctx + "/images/bwb.png";
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	$('.thumbnail').css({visibility:"hidden"}).find('img').attr('src', '');
+	timer = null;
 }
