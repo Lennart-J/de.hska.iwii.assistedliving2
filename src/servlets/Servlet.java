@@ -114,7 +114,16 @@ public class Servlet extends HttpServlet {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}	
-		return img;
+		
+		for (int x = 0; x < src.getWidth(); x++) {
+			for (int y = 0; y < src.getHeight(); y++) {
+				if (img.getRGB(x, y) == -16777216) {
+					src.setRGB(x, y, img.getRGB(x, y));
+				}
+			}
+		}
+		
+		return src;
 	}
 
 	private BufferedImage makeOpeningAndClosing(BufferedImage prog) {
