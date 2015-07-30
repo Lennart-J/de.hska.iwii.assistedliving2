@@ -111,11 +111,12 @@ function submit() {
 	}
 	
 	
-	var urls1 = constructUrls(date);
-	//url zum Bild 10 Minuten zuvor
+	
+	//calculate the interval in milliseconds from the input field
 	var intervalArr = $('#interval-input').val().split(':');
 	var intervalMiliseconds = parseInt(intervalArr[0]) * 3600000 + parseInt(intervalArr[1]) * 60000;
-	var urls2 = constructUrls(date - intervalMiliseconds);
+	var urls1 = constructUrls(date - 600000);
+	var urls2 = constructUrls(date - (intervalMiliseconds + 600000));
 	
 	$('#first-thumb').attr('href', urls2[1]);
 	$('#first-thumb img').attr('src', urls2[0]);
@@ -138,7 +139,7 @@ function constructUrls(date) {
 	var urls = [];
 	var baseDate = new Date(date);
 	year = baseDate.getFullYear();
-	month = baseDate.getMonth();
+	month = baseDate.getMonth() + 1;
 	if (month < 10) month = "0" + month;
 	day = baseDate.getDate();
 	if (day < 10) day = "0" + day;
@@ -146,6 +147,7 @@ function constructUrls(date) {
 	if (hours < 10) hours = "0" + hours;
 	minutes = Math.floor((date / (1000*60)) % 60);
 	minutes -= minutes % 5;
+	console.log("baseDate: " + baseDate.getMinutes());
 	if (minutes < 10) minutes = "0" + minutes;
 	
 	url = "http://kachelmannwetter.com/images/data/cache/px250/download_px250_";
