@@ -88,6 +88,22 @@ public class ImageProvider {
 		}
 		return null;
 	}
+	
+	public BufferedImage getImage(String urlOfImage)
+	{		
+		BufferedImage image = null;
+		URL url;
+		try {
+			url = new URL(urlOfImage); 
+			image = ImageIO.read(url);
+			BufferedImage convertedImg = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
+		    convertedImg.getGraphics().drawImage(image, 0, 0, null);
+			return convertedImg;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 }
 
