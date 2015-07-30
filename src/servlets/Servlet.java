@@ -43,44 +43,17 @@ public class Servlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		System.out.println("Started");
-		ImageProvider provider = new ImageProvider();
-		BufferedImage img1 = provider.getImage("2015","06", "27", "04", "00");
-		BufferedImage img2 = provider.getImage("2015","06", "27", "04", "05");
-		BufferedImage img3 = provider.getImage("2015","06", "27", "04", "10");
-		BufferedImage img4 = provider.getImage("2015","06", "27", "04", "20");
-
 		
-		Mat src1 = ImageConversionUtil.img2Mat(img1, false);
-		Mat src2 = ImageConversionUtil.img2Mat(img1, false);
-		Mat src3 = ImageConversionUtil.img2Mat(img3, false);
+		BufferedImage prog = getPrognose("http://kachelmannwetter.com/images/data/cache/px250/px250_2015_06_27_37_0400.png","http://kachelmannwetter.com/images/data/cache/px250/px250_2015_06_27_37_0410.png");
+		BufferedImage morphProg = makeOpeningAndClosing(prog);
 		
+		boolean raining = isRainingInNextStep(morphProg, 100, 100);
+		System.out.println(raining);
 		
-		//do stuff with mat
-		Mat destination1 = new Mat(src1.rows(), src1.cols(),0);
-
-		Video.calcOpticalFlowFarneback(src1,src3,destination1,0.5 ,3 ,5 ,3 ,5 ,1.1 ,0 );
-		
-		// referenzbilder: wo findet bewegung statt
-		BufferedImage refImgX = getRefImage(destination1,0);
-		BufferedImage refImgY = getRefImage(destination1,1);
-		
-		// prognosebild erstellen
-		BufferedImage progSrc = removeGreyBackground(img3);
-		BufferedImage prog = getProgImage(destination1, progSrc);
-		// closing & opening auf prognosebild
-		Mat morphMatSrc = ImageConversionUtil.img2Mat(prog, false);
-		Mat morphMatDst = new Mat(morphMatSrc.rows(), morphMatSrc.cols(),0);
-		Mat kernel1 = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(15,15));
-		Mat kernel2 = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(10,10));
-		Imgproc.morphologyEx(morphMatSrc, morphMatDst, Imgproc.MORPH_CLOSE, kernel1);
-		Imgproc.morphologyEx(morphMatDst, morphMatDst, Imgproc.MORPH_OPEN, kernel2);
-		
-		BufferedImage newImg = ImageConversionUtil.mat2Img(morphMatDst);
-		
-		if (newImg != null)
+		if (morphProg != null)
 		{
 		JDialog dialog = new JDialog();
-		ImageIcon icon = new ImageIcon(newImg);
+		ImageIcon icon = new ImageIcon(morphProg);
 		JLabel label = new JLabel(icon);
 		dialog.add( label );
 		dialog.pack();
@@ -90,14 +63,66 @@ public class Servlet extends HttpServlet {
 		
 	}
 
-	private BufferedImage removeGreyBackground(BufferedImage src) {
+	private BufferedImage makeOpeningAndClosing(BufferedImage prog) {
+		// closing & opening auf prognosebild
+		Mat morphMatSrc = ImageConversionUtil.img2Mat(prog, false);
+		Mat morphMatDst = new Mat(morphMatSrc.rows(), morphMatSrc.cols(),0);
+		Mat kernel1 = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(15,15));
+		Mat kernel2 = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(10,10));
+		Imgproc.morphologyEx(morphMatSrc, morphMatDst, Imgproc.MORPH_CLOSE, kernel1);
+		Imgproc.morphologyEx(morphMatDst, morphMatDst, Imgproc.MORPH_OPEN, kernel2);
+				
+		BufferedImage morphProg = ImageConversionUtil.mat2Img(morphMatDst);
+		return morphProg;
+	}
+
+	private BufferedImage getPrognose(String urlFirst, String urlNext) {
+		ImageProvider provider = new ImageProvider();
+		BufferedImage imgFirst = provider.getImage(urlFirst);
+		BufferedImage imgNext = provider.getImage(urlNext);
+
+		
+		Mat srcFirst = ImageConversionUtil.img2Mat(imgFirst, false);
+		Mat srcNext = ImageConversionUtil.img2Mat(imgNext, false);
+		
+		
+		//do stuff with mat
+		Mat optFlow = new Mat(srcFirst.rows(), srcFirst.cols(),0);
+
+		Video.calcOpticalFlowFarneback(srcFirst,srcNext,optFlow,0.5 ,3 ,5 ,3 ,5 ,1.1 ,0 );
+		
+		// referenzbilder: wo findet bewegung statt
+//		BufferedImage refImgX = getRefImage(optFlow,0);
+//		BufferedImage refImgY = getRefImage(optFlow,1);
+		
+		// prognosebild erstellen
+		BufferedImage progSrc = replaceGreyBackground(imgNext, 0x000000);
+		BufferedImage prog = getProgImage(optFlow, progSrc);
+		
+		return prog;
+	}
+
+	private boolean isRainingInNextStep(BufferedImage morphProg, int posX, int posY) {
+		
+		if (posX < morphProg.getWidth() && posY < morphProg.getHeight())
+		{
+			System.out.println(morphProg.getRGB(posX, posY));
+			if (morphProg.getRGB(posX, posY) != -16777216)
+			{			
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private BufferedImage replaceGreyBackground(BufferedImage src, int replacement) {
 		BufferedImage noBgImg = new BufferedImage(src.getWidth(), src.getHeight(), BufferedImage.TYPE_3BYTE_BGR);
 		noBgImg = src;
 		for (int x = 0; x < noBgImg.getWidth(); x++) {
 			for (int y = 0; y < noBgImg.getHeight(); y++) {
 				if (noBgImg.getRGB(x,y) == -9539986 || noBgImg.getRGB(x, y) == -16777216 )
 				{
-					noBgImg.setRGB(x, y, 0x000000);
+					noBgImg.setRGB(x, y, replacement);
 				}
 			}
 		}
