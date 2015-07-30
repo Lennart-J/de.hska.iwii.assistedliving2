@@ -70,10 +70,10 @@ public class Servlet extends HttpServlet {
 		// closing & opening auf prognosebild
 		Mat morphMatSrc = ImageConversionUtil.img2Mat(prog, false);
 		Mat morphMatDst = new Mat(morphMatSrc.rows(), morphMatSrc.cols(),0);
-		Mat kernel20 = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(20,20));
-		Mat kernel10 = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(10,10));
-		Imgproc.morphologyEx(morphMatSrc, morphMatDst, Imgproc.MORPH_CLOSE, kernel20);
-		Imgproc.morphologyEx(morphMatDst, morphMatDst, Imgproc.MORPH_OPEN, kernel10);
+		Mat kernel1 = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(15,15));
+		Mat kernel2 = Imgproc.getStructuringElement(Imgproc.MORPH_ELLIPSE, new Size(10,10));
+		Imgproc.morphologyEx(morphMatSrc, morphMatDst, Imgproc.MORPH_CLOSE, kernel1);
+		Imgproc.morphologyEx(morphMatDst, morphMatDst, Imgproc.MORPH_OPEN, kernel2);
 		
 		BufferedImage newImg = ImageConversionUtil.mat2Img(morphMatDst);
 		
