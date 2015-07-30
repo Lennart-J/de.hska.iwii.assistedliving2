@@ -26,19 +26,19 @@
 		</div>
 		<div id="form-wrapper">
 			<form action="configure" method="GET">
-			<fieldset id="config-form">
+			<fieldset id="config-form" class="wrapper-box">
 			<legend>Konfiguration:</legend>
 			<p>
 				Bitte wählen sie per Mausklick einen Ort auf der Karte aus!
 			</p>
-			<label for="bundesland">Bundesland: </label>
+			<label for="bundesland">Bundesland:</label>
 			<select id="bundesland" name="bundesland">
 				<option selected value="37">Baden-Würtemberg</option>
 				<option value="38">Bayern</option>
 				<option value="39">Berlin</option>
 				<option value="40">Brandenburg</option>
 				<option value="41">Bremen</option>
-				<option value="42">Hambrg</option>
+				<option value="42">Hamburg</option>
 				<option value="43">Hessen</option>
 				<option value="44">Mecklenburg-Vorpommern</option>
 				<option value="45">Niedersachsen</option>
@@ -50,6 +50,10 @@
 				<option value="51">Schleswig-Holstein</option>
 				<option value="52">Thüringen</option>
 			</select>
+			
+			<label for="date">Gewünschte Zeit:</label>
+			<input id="date-input" name="date" type="date">
+			<input id="time-input" name="time" type="time" step ="300">
 			<input id="coordinates-input" type="hidden" name="coordinates" value="1,1">
 			<div id="submit-wrapper">
 				<button id="submit" type="button" name="submit">Senden</button>
@@ -58,6 +62,21 @@
 			
 			</fieldset>
 		</form>
+		
+		<fieldset class="wrapper-box">
+			<legend>Benachrichtigung:</legend>
+			<p id="message">Kein Regen in den nächsten 10 Minuten!</p>
+		</fieldset>
+		
+		<fieldset class="wrapper-box">
+			<legend>Benutzte Bilder</legend>
+			<a id="first-thumb" class="thumbnail" href="#">
+				<img width=75 height=75 src="">
+			</a>
+			<a  id="second-thumb" class="thumbnail" href="#">
+				<img width=75 height=75 src="">
+			</a>
+		</fieldset>
 		</div>
 		
 	</div>

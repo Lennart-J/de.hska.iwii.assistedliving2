@@ -22,20 +22,28 @@ var bundeslandImages = {
 
 var canvas, context, select;
 var coordinates = "0,0";
-
+var url = "";
+var year, month, day, hours, minutes;
 
 document.addEventListener("DOMContentLoaded", function(event) {
 	select = document.getElementById("bundesland");
 	console.log(select);
 	select.addEventListener("change", function() {
-		var id = parseInt(select.value);
 		context.clearRect(0, 0, canvas.width, canvas.height);
 		var img = document.getElementById("map-img");
-		img.src = ctx + "/images/" + bundeslandImages[id]+ ".png";		
+		img.src = ctx + "/images/" + bundeslandImages[parseInt(select.value)]+ ".png";
+		$('.thumbnail').css({visibility:"hidden"}).find('img').attr('src', '');
 	});
 	init_canvas();
 	document.getElementById("reset").addEventListener("click", reset);
 	document.getElementById("submit").addEventListener("click", submit);
+	
+	$('.thumbnail').on('mouseover', function() {
+		$('#map-img').attr('src', $(this).find('img').attr('src'));
+	});
+	$('.thumbnail').on('mouseleave', function() {
+		$('#map-img').attr('src', ctx + "/images/" + bundeslandImages[parseInt(select.value)]+ ".png");	
+	});
 });
 
 function init_canvas() {
@@ -48,7 +56,7 @@ function init_canvas() {
 	img.onload = function() {
 		canvas.width = img.width;
 		canvas.height = img.height;
-		context.clearRect(0, 0, canvas.width, canvas.height);
+		img.onload = null;
 	};
 
 	canvas.addEventListener("click", function(e) {
@@ -83,19 +91,71 @@ function init_canvas() {
 }
 
 function submit() {
-	//var now = new Date(); 
-	//var utc_date = now.getUTCFullYear() + "," + (now.getUTCMonth() + 1) + "," + now.getUTCDate() + "," + now.getUTCHours() + "," + now.getUTCMinutes();
-	var now = Date.now();
+	var date;
+	var dateInput = $('#date-input').val();
+	var timeInput = $('#time-input').val();
+	
+	if (dateInput != '' && timeInput != '') {
+		date = new Date(dateInput + " " + timeInput).getTime();
+		//console.log(new Date(dateInput + " " + timeInput), date);
+	} else {
+		date = Date.now();
+	}
+	
+	
+	var urls1 = constructUrls(date);
+	//url zum Bild 10 Minuten zuvor
+	var urls2 = constructUrls(date - 600000);
+	
+	$('#first-thumb').attr('href', urls2[1]);
+	$('#first-thumb img').attr('src', urls2[0]);
+	$('#second-thumb').attr('href', urls1[1]);
+	$('#second-thumb img').attr('src', urls1[0]);
+	$('.thumbnail').css({visibility:"visible"});
+	//Testbilder
+	//"http://kachelmannwetter.com/images/data/cache/px250/px250_2015_06_27_37_0400.png"
+	//"http://kachelmannwetter.com/images/data/cache/px250/px250_2015_06_27_37_0410.png"
+	
 	$.get('configure', 
-			{bundesland: select.value, coordinates: coordinates, date: now}, 
+			{bundesland: select.value, coordinates: coordinates, url1: urls1[1], url2: urls2[1]}, 
 			function(data) {
 				console.log(data);
 			}
 	);
 }
 
+function constructUrls(date) {
+	var urls = [];
+	var baseDate = new Date(date);
+	year = baseDate.getFullYear();
+	month = baseDate.getMonth();
+	if (month < 10) month = "0" + month;
+	day = baseDate.getDate();
+	if (day < 10) day = "0" + day;
+	hours = Math.floor((date / (1000*60*60)) % 24);
+	if (hours < 10) hours = "0" + hours;
+	minutes = Math.floor((date / (1000*60)) % 60);
+	minutes -= minutes % 5;
+	if (minutes < 10) minutes = "0" + minutes;
+	
+	url = "http://kachelmannwetter.com/images/data/cache/px250/download_px250_";
+	url += year + "_";
+	url += month + "_";
+	url += day + "_";
+	url += parseInt(select.value) + "_";
+	url += hours;
+	url += minutes;
+	url += ".png";
+	
+	urls.push(url);
+	urls.push(url.replace(/download_/, ""))
+	
+	return urls;
+}
+
 function reset() {
 	var img = document.getElementById("map-img");
 	img.src = ctx + "/images/bwb.png";
 	context.clearRect(0, 0, canvas.width, canvas.height);
+	$('.thumbnail').css({visibility:"hidden"}).find('img').attr('src', '');
 }

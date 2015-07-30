@@ -16,6 +16,9 @@ body {
 }
 
 #img-wrapper {
+	width:760px;
+	height:617px;
+	overflow:hidden;
 	display: inline-block;
 	user-select: none;
 -webkit-user-select: none;
@@ -43,10 +46,28 @@ body {
 #bundesland {
 	display:block;
 }
-#config-form {
+
+#map-img{
+	min-width:100%;
+	min-height:100%;
+}
+
+#date-input, #time-input {
+	height: 38px;
+    padding: 6px 10px;
+    background-color: #fff;
+    border: 1px solid #D1D1D1;
+    border-radius: 4px;
+    box-shadow: none;
+    box-sizing: border-box;
+}
+.wrapper-box {
 	padding: 10px;
     border: 2px groove threedface;
     -webkit-box-shadow: 4px 7px 13px -5px rgba(0,0,0,0.2);
 	-moz-box-shadow: 4px 7px 13px -5px rgba(0,0,0,0.2);
 	box-shadow: 4px 7px 13px -5px rgba(0,0,0,0.2);
+}
+.thumbnail {
+	visibility:hidden;
 }
